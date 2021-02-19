@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="lDtMo1" name="RSynth1" projectType="audioplug" useAppConfig="0"
+              addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
+              pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn"
+              pluginFormats="buildVST3" headerPath="C:\Maximilian-MaximilianV1">
+  <MAINGROUP id="WpbIv9" name="RSynth1">
+    <GROUP id="{2059F1CF-0048-3C91-03A7-1AB50513D930}" name="Source">
+      <GROUP id="{1C4D1E8A-F23C-7645-6994-387A067CF686}" name="libs">
+        <FILE id="Nv3hhk" name="maximilian.cpp" compile="1" resource="0" file="../../../../../../../../../Maximilian-MaximilianV1/maximilian.cpp"/>
+        <FILE id="E3LWMm" name="maximilian.h" compile="0" resource="0" file="../../../../../../../../../Maximilian-MaximilianV1/maximilian.h"/>
+      </GROUP>
+      <FILE id="yBPvDS" name="Lfo.cpp" compile="1" resource="0" file="Source/Lfo.cpp"/>
+      <FILE id="K6Bpmu" name="Lfo.h" compile="0" resource="0" file="Source/Lfo.h"/>
+      <FILE id="TneX5s" name="Arpeggiator.cpp" compile="1" resource="0" file="Source/Arpeggiator.cpp"/>
+      <FILE id="ufQOQ0" name="Arpeggiator.h" compile="0" resource="0" file="Source/Arpeggiator.h"/>
+      <FILE id="LynDrZ" name="Chorus.cpp" compile="1" resource="0" file="Source/Chorus.cpp"/>
+      <FILE id="y1QRze" name="Chorus.h" compile="0" resource="0" file="Source/Chorus.h"/>
+      <FILE id="smsKVX" name="ChorusModule.cpp" compile="1" resource="0"
+            file="Source/ChorusModule.cpp"/>
+      <FILE id="jVkHbg" name="ChorusModule.h" compile="0" resource="0" file="Source/ChorusModule.h"/>
+      <FILE id="Geib7n" name="FilterChoice.cpp" compile="1" resource="0"
+            file="Source/FilterChoice.cpp"/>
+      <FILE id="VocQcY" name="FilterChoice.h" compile="0" resource="0" file="Source/FilterChoice.h"/>
+      <FILE id="eHTqOG" name="SquareOsc.cpp" compile="1" resource="0" file="Source/SquareOsc.cpp"/>
+      <FILE id="yi8U5a" name="SquareOsc.h" compile="0" resource="0" file="Source/SquareOsc.h"/>
+      <FILE id="rvexM6" name="SubOsc.cpp" compile="1" resource="0" file="Source/SubOsc.cpp"/>
+      <FILE id="P11Igf" name="SubOsc.h" compile="0" resource="0" file="Source/SubOsc.h"/>
+      <FILE id="c1WUSt" name="SawOsc.cpp" compile="1" resource="0" file="Source/SawOsc.cpp"/>
+      <FILE id="VzbjXm" name="SawOsc.h" compile="0" resource="0" file="Source/SawOsc.h"/>
+      <FILE id="MO2AY5" name="Gain.cpp" compile="1" resource="0" file="Source/Gain.cpp"/>
+      <FILE id="AxOUuv" name="Gain.h" compile="0" resource="0" file="Source/Gain.h"/>
+      <FILE id="BmFAyy" name="Filter.cpp" compile="1" resource="0" file="Source/Filter.cpp"/>
+      <FILE id="faHjk0" name="Filter.h" compile="0" resource="0" file="Source/Filter.h"/>
+      <FILE id="EJZVHT" name="Envelope.cpp" compile="1" resource="0" file="Source/Envelope.cpp"/>
+      <FILE id="x6xoUQ" name="Envelope.h" compile="0" resource="0" file="Source/Envelope.h"/>
+      <FILE id="zW12qs" name="SynthSound.h" compile="0" resource="0" file="Source/SynthSound.h"/>
+      <FILE id="kC0DXs" name="SynthVoice.h" compile="0" resource="0" file="Source/SynthVoice.h"/>
+      <FILE id="ZwUWnG" name="PluginProcessor.cpp" compile="1" resource="0"
+            file="Source/PluginProcessor.cpp"/>
+      <FILE id="TwLpml" name="PluginProcessor.h" compile="0" resource="0"
+            file="Source/PluginProcessor.h"/>
+      <FILE id="jylFqy" name="PluginEditor.cpp" compile="1" resource="0"
+            file="Source/PluginEditor.cpp"/>
+      <FILE id="PWD622" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+    </GROUP>
+  </MAINGROUP>
+  <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
+  <EXPORTFORMATS>
+    <VS2019 targetFolder="Builds/VisualStudio2019">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug" targetName="RSynth1"/>
+        <CONFIGURATION isDebug="0" name="Release" targetName="RSynth1"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_audio_basics" path="../../../../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../../../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../../../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="../../../../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../../../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="../../../../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="../../../../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_dsp" path="../../../../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../../../../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../../../../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../../../../../../../../JUCE/modules"/>
+      </MODULEPATHS>
+    </VS2019>
+  </EXPORTFORMATS>
+  <MODULES>
+    <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_plugin_client" showAllCode="1" useLocalCopy="0"
+            useGlobalPath="1"/>
+    <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_utils" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_core" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_dsp" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_events" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+  </MODULES>
+  <LIVE_SETTINGS>
+    <WINDOWS/>
+  </LIVE_SETTINGS>
+</JUCERPROJECT>
