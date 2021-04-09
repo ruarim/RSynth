@@ -19,22 +19,27 @@ Chorus::Chorus(RSynth1AudioProcessor& p) :
     chorusMix.setValue(0.1f);
     chorusMix.setTextBoxStyle(juce::Slider::NoTextBox, true, 0, 0);
     addAndMakeVisible(&chorusMix);
-    addAndMakeVisible(&chorusLabel);
-    chorusLabel.attachToComponent(&chorusMix, false);
-    chorusLabel.setJustificationType(juce::Justification::centred);
-    chorusLabel.setFont(juce::Font(12.0f, juce::Font::plain));
+    addAndMakeVisible(&chorusMixLabel);
+    chorusMixLabel.attachToComponent(&chorusMix, false);
+    chorusMixLabel.setJustificationType(juce::Justification::centred);
+    chorusMixLabel.setFont(juce::Font(12.0f, juce::Font::plain));
 
-    chorusOnOff.setButtonText("On/Off");
-    addAndMakeVisible(&chorusOnOff);
-    chorusOnOff.setClickingTogglesState(true);
+    chorusDepth.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
+    chorusDepth.setValue(0.1f);
+    chorusDepth.setTextBoxStyle(juce::Slider::NoTextBox, true, 0, 0);
+    addAndMakeVisible(&chorusDepth);
+    addAndMakeVisible(&chorusDepthLabel);
+    chorusDepthLabel.attachToComponent(&chorusDepth, false);
+    chorusDepthLabel.setJustificationType(juce::Justification::centred);
+    chorusDepthLabel.setFont(juce::Font(12.0f, juce::Font::plain));
 
-    chorusVal = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(processor.valueTree, "CHORUSMIX", chorusMix);
-    chorusBool = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(processor.valueTree, "CHORUSONOFF", chorusOnOff);
+    chorusValMix = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(processor.valueTree, "CHORUSMIX", chorusMix);
+    chorusValDepth = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(processor.valueTree, "CHORUSDEPTH", chorusDepth);
 }
 Chorus::~Chorus()
 {
-    chorusVal = nullptr;
-    chorusBool = nullptr;
+    chorusValMix = nullptr;
+    chorusValDepth = nullptr;
 }
 void Chorus::paint(juce::Graphics& g)
 {
@@ -44,5 +49,5 @@ void Chorus::paint(juce::Graphics& g)
 void Chorus::resized()
 {
     chorusMix.setBounds(20, 30, sliderWidth, 100);
-    chorusOnOff.setBounds(60, 30, buttonWidth, 50);
+    chorusDepth.setBounds(60, 30, sliderWidth, 100);
 }

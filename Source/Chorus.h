@@ -24,13 +24,14 @@ private:
     RSynth1AudioProcessor& processor;
 
     juce::Slider chorusMix;
-    juce::TextButton chorusOnOff;
+    juce::Slider chorusDepth;
 
-    juce::Label chorusLabel { {}, "Dry/Wet" };
+    juce::Label chorusMixLabel { {}, "Dry/Wet" };
+    juce::Label chorusDepthLabel{ {}, "Depth" };
 
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> chorusVal;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> chorusBool;
 
-    int const buttonWidth = 50.0f;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> chorusValMix;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> chorusValDepth;
+
     int const sliderWidth = 40.0f;
 };

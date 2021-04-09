@@ -16,7 +16,7 @@ Lfo::Lfo(RSynth1AudioProcessor& p) :
     setSize(200, 100);
 
     lfoRateSlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
-    lfoRateSlider.setRange(0.1f, 5000.0f);
+    lfoRateSlider.setRange(0.1f, 5.0f);
     lfoRateSlider.setValue(0.1f);
     lfoRateSlider.setTextBoxStyle(juce::Slider::NoTextBox, true, 0, 0);
     addAndMakeVisible(&lfoRateSlider);
@@ -26,24 +26,26 @@ Lfo::Lfo(RSynth1AudioProcessor& p) :
     rateLabel.setJustificationType(juce::Justification::centred);
     rateLabel.setFont(juce::Font(12.0f, juce::Font::plain));
 
-    lfoLevelSlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
-    lfoLevelSlider.setRange(0.1f, 5000.0f);
-    lfoLevelSlider.setValue(0.1f);
-    lfoLevelSlider.setTextBoxStyle(juce::Slider::NoTextBox, true, 0, 0);
-    addAndMakeVisible(&lfoLevelSlider);
+    lfoDepthSlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
+    lfoDepthSlider.setRange(0.1f, 5.0f);
+    lfoDepthSlider.setValue(0.1f);
+    lfoDepthSlider.setTextBoxStyle(juce::Slider::NoTextBox, true, 0, 0);
+    addAndMakeVisible(&lfoDepthSlider);
     addAndMakeVisible(&levelLabel);
-    levelLabel.attachToComponent(&lfoLevelSlider, false);
+    levelLabel.attachToComponent(&lfoDepthSlider, false);
     //attackLabel.setText("A", juce::dontSendNotification);
     levelLabel.setJustificationType(juce::Justification::centred);
     levelLabel.setFont(juce::Font(12.0f, juce::Font::plain));
 
+    lfoRateSlider.setSkewFactorFromMidPoint(1.0f);
+
     lfoRateVal = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(processor.valueTree, "LFORATE", lfoRateSlider);
-    lfoLevelVal = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(processor.valueTree, "LFOLEVEL", lfoLevelSlider);
+    lfoDepthVal = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(processor.valueTree, "LFODEPTH", lfoDepthSlider);
 }
 Lfo::~Lfo()
 {
     lfoRateVal = nullptr;
-    lfoLevelVal = nullptr;
+    lfoDepthVal = nullptr;
 }
 
 void Lfo::paint(juce::Graphics& g)
@@ -54,6 +56,6 @@ void Lfo::paint(juce::Graphics& g)
 void Lfo::resized()
 {
     lfoRateSlider.setBounds(20, 30, sliderWidth, 100);
-    lfoLevelSlider.setBounds(60, 30, sliderWidth, 100);
+    lfoDepthSlider.setBounds(60, 30, sliderWidth, 100);
 
 }

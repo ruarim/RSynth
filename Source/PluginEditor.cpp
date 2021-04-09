@@ -16,7 +16,7 @@ RSynth1AudioProcessorEditor::RSynth1AudioProcessorEditor (RSynth1AudioProcessor&
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
-    setSize (800, 500);
+    setSize (440, 300);
 
     addAndMakeVisible(&envGUI);
     addAndMakeVisible(&filterGUI);
@@ -53,13 +53,13 @@ void RSynth1AudioProcessorEditor::resized()
     //const int componentWidth = 200;
     //const int componentHeight = 200;
 
-    envGUI.setBounds(getWidth() / 2, getHeight() / 2 - 50, 400, 200);
-    filterGUI.setBounds(getWidth() / 2 - 100, getHeight() / 2 - 200, 200, 200);
-    gainGUI.setBounds(getWidth() / 2 - 150, getHeight() / 2 - 200, 50, 150);
-    sawGUI.setBounds(getWidth() / 2 - 150, getHeight() / 2 - 50, 50, 150);
-    subGUI.setBounds(getWidth() / 2 - 100, getHeight() / 2 - 50, 50, 150);
-    sqrGUI.setBounds(getWidth() / 2 - 50, getHeight() / 2 - 50, 50, 150);
-    cGUI.setBounds(getWidth() / 2 + 75, getHeight() / 2 - 200, 150, 150);
-    aGUI.setBounds(getWidth() / 2 + 175, getHeight() / 2 - 200, 150, 150);
-    lfoGUI.setBounds(getWidth() / 2 + 175, getHeight() / 2 - 50, 100, 200);
+    envGUI.setBounds(150, 150, 400, 200);
+    filterGUI.setBounds(50, 0, 200, 200);
+    gainGUI.setBounds(0, 0, 50, 150);
+    sawGUI.setBounds(0, 150, 50, 150);
+    subGUI.setBounds(50, 150, 50, 150);
+    sqrGUI.setBounds(100, 150, 50, 150);
+    cGUI.setBounds(225, 0, 150, 150);
+    aGUI.setBounds(310, 0, 150, 150);
+    lfoGUI.setBounds(310, 150, 100, 200);
 }

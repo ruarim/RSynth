@@ -55,8 +55,9 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
-    juce::MidiKeyboardState                           keyboardState;
+    void updateChorus();
 
+    juce::MidiKeyboardState                           keyboardState; //not used?
     juce::AudioProcessorValueTreeState valueTree;
 
 private:
@@ -69,7 +70,9 @@ private:
     int lastNote;
     int time;
     float rate; //sample rate
+
     juce::SortedSet<int> notes;
+    juce::dsp::Chorus<float> chorus;
 
     juce::AudioProcessorValueTreeState::ParameterLayout createParams();
     //==============================================================================

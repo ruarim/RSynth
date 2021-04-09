@@ -25,13 +25,13 @@ private:
     RSynth1AudioProcessor& processor;
 
     juce::Slider lfoRateSlider;
-    juce::Slider lfoLevelSlider;
+    juce::Slider lfoDepthSlider;
 
     juce::Label rateLabel{ {}, "Lfo Rate" };
-    juce::Label levelLabel{ {}, "Level" };
+    juce::Label levelLabel{ {}, "Depth" };
 
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> lfoRateVal;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> lfoLevelVal;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> lfoDepthVal;
 
     int const sliderWidth = 40.0f;
 

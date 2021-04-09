@@ -19,7 +19,7 @@ RSynth1AudioProcessor::RSynth1AudioProcessor()
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       ), valueTree(*this, nullptr, "Parameters", createParams()) //initialises the audioprocessorvaluetree nullptr as no undo manager
+                       ), valueTree(*this, nullptr, juce::Identifier("RSynthParameters"), createParams()) //initialises the audioprocessorvaluetree nullptr as no undo manager
     //instantiate synth params and add to tree here
 #endif
 {
@@ -106,6 +106,18 @@ void RSynth1AudioProcessor::prepareToPlay (double sampleRate, int samplesPerBloc
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
+     
+    //create dsp spec for chorus
+    juce::dsp::ProcessSpec spec;
+    spec.maximumBlockSize = samplesPerBlock;
+    spec.sampleRate = sampleRate;
+    spec.numChannels = getMainBusNumOutputChannels();
+
+    chorus.prepare(spec);
+    chorus.reset();
+ 
+    //setup chorus
+    updateChorus();
 
     //setup arpeggiator
     //if arp on?? 
@@ -154,7 +166,7 @@ bool RSynth1AudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) 
 
 void RSynth1AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
-    ////setup up arpeggiator 
+    //setup up arpeggiator 
     if (*valueTree.getRawParameterValue("ARPONOFF") == true)
     {
         auto numSamples = buffer.getNumSamples();
@@ -218,20 +230,24 @@ void RSynth1AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
                                 valueTree.getRawParameterValue("SAWOSC"),
                                 valueTree.getRawParameterValue("SUBOSC"));
             rVoice->setFilterChoice(valueTree.getRawParameterValue("FILTERTYPE"));
-            rVoice->setChorus(valueTree.getRawParameterValue("CHORUSMIX"),
-                                valueTree.getRawParameterValue("CHORUSONOFF"));
+            //rVoice->setChorus(valueTree.getRawParameterValue("CHORUSMIX"),
+            //                    valueTree.getRawParameterValue("CHORUSONOFF"));
             rVoice->setLFO(valueTree.getRawParameterValue("LFORATE"),
-                                valueTree.getRawParameterValue("LFOLEVEL"));
+                                valueTree.getRawParameterValue("LFODEPTH"));
             
         }
     }
 
 
     buffer.clear();
-
-    //keyboardState.processNextMidiBuffer(midiMessages, 0, buffer.getNumSamples(), true);
-
+    
     rSynth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
+
+    //proccess signal with chorus
+    juce::dsp::AudioBlock<float> block(buffer);
+    updateChorus();
+    chorus.process(juce::dsp::ProcessContextReplacing<float>(block));
+
     midiMessages.clear();
 }
 
@@ -252,12 +268,26 @@ void RSynth1AudioProcessor::getStateInformation (juce::MemoryBlock& destData)
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
+
 }
 
 void RSynth1AudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
+}
+
+void RSynth1AudioProcessor::updateChorus()
+{   
+    //get values from gui
+    //create chorus sound
+
+    //set depth 
+    chorus.setDepth(*valueTree.getRawParameterValue("CHORUSDEPTH"));
+
+    //set dry wet level
+    chorus.setMix(*valueTree.getRawParameterValue("CHORUSMIX"));
+
 }
 
 //==============================================================================
@@ -281,12 +311,12 @@ juce::AudioProcessorValueTreeState::ParameterLayout RSynth1AudioProcessor::creat
     params.push_back(std::make_unique<juce::AudioParameterFloat>("SUBOSC", "SubOsc", juce::NormalisableRange<float>(0.0f, 0.33f), 0.15f));
     params.push_back(std::make_unique<juce::AudioParameterFloat>("SQROSC", "SqrOsc", juce::NormalisableRange<float>(0.0f, 0.33f), 0.15f));
     params.push_back(std::make_unique<juce::AudioParameterBool>("FILTERTYPE", "Hi/Lowpass", false));
-    params.push_back(std::make_unique<juce::AudioParameterFloat>("CHORUSMIX", "ChorusMix", juce::NormalisableRange<float>(0.0f, 1.00f), 0.5f));
-    params.push_back(std::make_unique<juce::AudioParameterBool>("CHORUSONOFF", "On/Off", false));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("CHORUSMIX", "ChorusMix", juce::NormalisableRange<float>(0.0f, 1.00f), 0.0f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("CHORUSDEPTH", "ChorusDepth", juce::NormalisableRange<float>(0.0f, 1.00f), 0.0f));
     params.push_back(std::make_unique<juce::AudioParameterFloat>("ARPSPEED", "ArpSpeed", juce::NormalisableRange<float>(0.0f, 1.00f), 0.5f));
     params.push_back(std::make_unique<juce::AudioParameterBool>("ARPONOFF", "On/Off", false));
-    params.push_back(std::make_unique<juce::AudioParameterFloat>("LFORATE", "lfoRate", juce::NormalisableRange<float>(0.0f, 20.0f), 0.5f));
-    params.push_back(std::make_unique<juce::AudioParameterFloat>("LFOLEVEL", "lfoLevel", juce::NormalisableRange<float>(0.0f, 1.0f), 0.5f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("LFORATE", "lfoRate", juce::NormalisableRange<float>(0.0f, 5.0f), 0.1f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("LFODEPTH", "lfodepth", juce::NormalisableRange<float>(0.0f, 1.0f), 0.0f));
     
-    return{ params.begin(), params.end() }; //returns vector of parameters
+    return{ params.begin(), params.end() }; //returns parameters list
 }

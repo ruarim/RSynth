@@ -17,7 +17,8 @@ Filter::Filter(RSynth1AudioProcessor& p) :
     setSize(200, 100);
 
     cutoffSlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
-    cutoffSlider.setValue(0.1f);
+    cutoffSlider.setRange(20.0f, 20000.0f);
+    cutoffSlider.setValue(20.0f);
     cutoffSlider.setTextBoxStyle(juce::Slider::NoTextBox, true, 0, 0);
     addAndMakeVisible(&cutoffSlider);
     addAndMakeVisible(&cutoffLabel);
@@ -38,6 +39,8 @@ Filter::Filter(RSynth1AudioProcessor& p) :
     addAndMakeVisible(&filterChoiceButton);
     filterChoiceButton.setClickingTogglesState(true);
 
+    cutoffSlider.setSkewFactorFromMidPoint(800.0f);
+
     cutoffVal = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(processor.valueTree, "CUTOFF", cutoffSlider);
     resoVal = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(processor.valueTree, "RESO", resoSlider);
     filterBool = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(processor.valueTree, "FILTERTYPE", filterChoiceButton);
@@ -46,7 +49,7 @@ Filter::~Filter()
 {
     cutoffVal = nullptr;
     resoVal = nullptr;
-    filterBool = nullptr;
+    filterBool = nullptr;   
 }
 void Filter::paint(juce::Graphics& g)
 {
