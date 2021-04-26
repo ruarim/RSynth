@@ -57,21 +57,22 @@ public:
 
     void updateChorus();
 
-    juce::MidiKeyboardState                           keyboardState; //not used?
-    juce::AudioProcessorValueTreeState valueTree;
+    //juce::MidiKeyboardState                           keyboardState; //not used?
+    juce::AudioProcessorValueTreeState valueTree; //GUI value state
 
 private:
+    //number of synth voices
+    const int rVoices = 8;
     juce::Synthesiser rSynth;
-    SynthVoice* rVoice;
-    double lastSampleRate;
 
     //arp vars
     int currentNote; 
     int lastNote;
     int time;
     float rate; //sample rate
+    juce::SortedSet<int> notes; //chord notes
 
-    juce::SortedSet<int> notes;
+    //chorus
     juce::dsp::Chorus<float> chorus;
 
     juce::AudioProcessorValueTreeState::ParameterLayout createParams();

@@ -23,6 +23,7 @@ public:
 private:
     RSynth1AudioProcessor& processor;
 
+    //paramters
     juce::Slider cutoffSlider;
     juce::Slider resoSlider;
     juce::TextButton filterChoiceButton;
@@ -34,7 +35,7 @@ private:
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> resoVal;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> filterBool;
 
-    int const buttonWidth = 50.0f;
+    int const buttonWidth = 60.0f;
     int const sliderWidth = 40.0f;
 
 };

@@ -12,15 +12,13 @@
 #include <JuceHeader.h>
 #include "SynthSound.h"
 #include "maximilian.h"
-#include "ChorusModule.h"
+
 
 class SynthVoice : public juce::SynthesiserVoice
 {
 public:
     bool canPlaySound(juce::SynthesiserSound* sound) override;
    
-    //prepare to play to add juce statevarfilter
-
     void setADSRParams(std::atomic<float>* attack, std::atomic<float>* decay, std::atomic<float>* sustain, std::atomic<float>* release); 
 
     void startNote(int midiNoteNumber, float velocity, juce::SynthesiserSound* sound, int currentPitchWheelPosition);
@@ -31,13 +29,13 @@ public:
     
     void setFilter(std::atomic<float>* cutoffValue, std::atomic<float>* resonanceValue);
     
-    void setGain(std::atomic<float>* gainInput);
+    void setLevel(std::atomic<float>* gainInput);
     
     void setLFO(std::atomic<float>* lfoRateInput, std::atomic<float>* lfoLevelInput);
     
     double getLFO();
     
-    void setOscGains(std::atomic<float>* sqr, std::atomic<float>* saw, std::atomic<float>* sub);
+    void setOscLevels(std::atomic<float>* sqr, std::atomic<float>* saw, std::atomic<float>* sub);
     
     double getSawOsc();
     
@@ -47,7 +45,7 @@ public:
 
     double combineOsc();
 
-    void renderNextBlock(juce::AudioSampleBuffer& outputBuffer, int startSample, int numSamples);
+    void renderNextBlock(juce::AudioBuffer<float>& outputBuffer, int startSample, int numSamples);
 
     //unused overrides
     void pitchWheelMoved(int) override {}
@@ -55,27 +53,27 @@ public:
 
 private:
     //adsr
-    maxiEnv env1;
+    maxiEnv env;
 
-    //osc
-    //pulse width?? 
+    //oscilators
     maxiOsc sawOsc;
     maxiOsc sqrOsc;
     maxiOsc subOsc;
-    double sawOscGain;
-    double sqrOscGain;
-    double subOscGain;
 
+    //mixer settings
+    double sawOscLevel;
+    double sqrOscLevel;
+    double subOscLevel;
+
+    //voice frequency
     double frequency;
     double currentFrequency;
-    //double processedFrequency;
 
-    //gain 
+    //amp level  
     double gain;
-    double level;
 
     //filter
-    maxiFilter filter1;
+    maxiFilter filter;
     double cutoff;
     double resonance;
     double fChoice;

@@ -26,7 +26,7 @@ private:
 
     juce::Slider sawOscSlider;
 
-    juce::Label sawOscLabel{ {}, "SawOsc" };
+    juce::Label sawOscLabel{ {}, "Saw" };
 
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sawOscVal;
 

@@ -25,7 +25,7 @@ private:
 
     juce::Slider squareOscSlider;
 
-    juce::Label squareOscLabel{ {}, "SquareOsc" };
+    juce::Label squareOscLabel{ {}, "Square" };
 
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> squareOscVal;
 

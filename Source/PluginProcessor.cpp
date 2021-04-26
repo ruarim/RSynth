@@ -20,23 +20,26 @@ RSynth1AudioProcessor::RSynth1AudioProcessor()
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
                        ), valueTree(*this, nullptr, juce::Identifier("RSynthParameters"), createParams()) //initialises the audioprocessorvaluetree nullptr as no undo manager
-    //instantiate synth params and add to tree here
+                                                                                            //create synth params and add to tree here
 #endif
 {
-    //tree = std::make_unique<juce::AudioProcessorValueTreeState>(*this);
-
 
     rSynth.clearVoices();
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < rVoices; i++)
     {
         rSynth.addVoice(new SynthVoice());
     }
+
     rSynth.clearSounds();
     rSynth.addSound(new SynthSound());
+
+    //valueTree.state = juce::ValueTree("ATTACK"); // for each to implement xml state export
 }
 
 RSynth1AudioProcessor::~RSynth1AudioProcessor()
 {
+    rSynth.clearVoices();
+    rSynth.clearSounds();
 }
 
 //==============================================================================
@@ -115,7 +118,7 @@ void RSynth1AudioProcessor::prepareToPlay (double sampleRate, int samplesPerBloc
 
     chorus.prepare(spec);
     chorus.reset();
- 
+    
     //setup chorus
     updateChorus();
 
@@ -128,7 +131,6 @@ void RSynth1AudioProcessor::prepareToPlay (double sampleRate, int samplesPerBloc
     rate = static_cast<float> (sampleRate);
 
     juce::ignoreUnused(samplesPerBlock);
-    lastSampleRate = sampleRate;
     rSynth.setCurrentPlaybackSampleRate(sampleRate);
     
     //midiCollector.reset(sampleRate);
@@ -166,30 +168,34 @@ bool RSynth1AudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) 
 
 void RSynth1AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
+    juce::ScopedNoDenormals noDernormals; 
+
     //setup up arpeggiator 
     if (*valueTree.getRawParameterValue("ARPONOFF") == true)
     {
         auto numSamples = buffer.getNumSamples();
         auto noteDuration = static_cast<int> (std::ceil(rate * 0.25f * (0.1f + (1.0f - (*valueTree.getRawParameterValue("ARPSPEED"))))));
         
-        for (const auto metaData : midiMessages)
+        //get pressed keys
+        for (const auto metaData : midiMessages) //loop through keys pressed
         {
             const auto msg = metaData.getMessage();
 
-            if (msg.isNoteOn())
+            if (msg.isNoteOn())  //add note sorted set if key down
                 notes.add(msg.getNoteNumber());
-            else if (msg.isNoteOff())
+            else if (msg.isNoteOff()) //remove note if key is lifted
                 notes.removeValue(msg.getNoteNumber());
         }
         midiMessages.clear();
 
-        if ((time + numSamples) >= noteDuration)
+        //create arp sequence from held keys
+        if ((time + numSamples) >= noteDuration) //
         {
-            auto offset = juce::jmax(0, juce::jmin((int)(noteDuration - time), numSamples - 1));
+            auto offset = juce::jmax(0, juce::jmin((int)(noteDuration - time), numSamples - 1)); 
 
             if (lastNote > 0)
             {
-                midiMessages.addEvent(juce::MidiMessage::noteOff(1, lastNote), offset);
+                midiMessages.addEvent(juce::MidiMessage::noteOff(1, lastNote), offset); 
                 lastNote = -1;
             }
             if (notes.size() > 0)
@@ -207,44 +213,39 @@ void RSynth1AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
 
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
+    
+    
 
     for (int i = 0; i < rSynth.getNumVoices(); i++)
     {
-        if ((rVoice = dynamic_cast<SynthVoice*>(rSynth.getVoice(i))))
+        if (SynthVoice* rVoice = dynamic_cast<SynthVoice*>(rSynth.getVoice(i))) //get pointer to voice
         {
-            //audio processor value tree state for
-            //osc volume
-            //adrs
-            //voice->getADSRParams(10.0f, );
-            //lfo
-            //gain
-            //ect...
-            rVoice->setADSRParams(valueTree.getRawParameterValue("ATTACK"),
+            rVoice->setADSRParams(valueTree.getRawParameterValue("ATTACK"), //apply paramerter to voice
                                   valueTree.getRawParameterValue("DECAY"),
                                   valueTree.getRawParameterValue("SUSTAIN"),
                                   valueTree.getRawParameterValue("RELEASE"));
+
             rVoice->setFilter(valueTree.getRawParameterValue("CUTOFF"),
                               valueTree.getRawParameterValue("RESO"));
-            rVoice->setGain(valueTree.getRawParameterValue("GAIN"));
-            rVoice->setOscGains(valueTree.getRawParameterValue("SQROSC"),
+
+            rVoice->setLevel(valueTree.getRawParameterValue("AMP"));
+
+            rVoice->setOscLevels(valueTree.getRawParameterValue("SQROSC"),
                                 valueTree.getRawParameterValue("SAWOSC"),
                                 valueTree.getRawParameterValue("SUBOSC"));
+
             rVoice->setFilterChoice(valueTree.getRawParameterValue("FILTERTYPE"));
-            //rVoice->setChorus(valueTree.getRawParameterValue("CHORUSMIX"),
-            //                    valueTree.getRawParameterValue("CHORUSONOFF"));
+
             rVoice->setLFO(valueTree.getRawParameterValue("LFORATE"),
                                 valueTree.getRawParameterValue("LFODEPTH"));
-            
         }
     }
 
-
-    buffer.clear();
-    
     rSynth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 
     //proccess signal with chorus
     juce::dsp::AudioBlock<float> block(buffer);
+
     updateChorus();
     chorus.process(juce::dsp::ProcessContextReplacing<float>(block));
 
@@ -269,19 +270,27 @@ void RSynth1AudioProcessor::getStateInformation (juce::MemoryBlock& destData)
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
 
+    /*juce::MemoryOutputStream stream(destData, false);
+    valueTree.state.writeToStream(stream);*/
 }
 
 void RSynth1AudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
+
+    /*juce::ValueTree tree = juce::ValueTree::readFromData(data, sizeInBytes);
+
+    if (tree.isValid())
+    {
+        valueTree.state = tree;
+    }*/
 }
 
 void RSynth1AudioProcessor::updateChorus()
 {   
     //get values from gui
     //create chorus sound
-
     //set depth 
     chorus.setDepth(*valueTree.getRawParameterValue("CHORUSDEPTH"));
 
@@ -300,13 +309,13 @@ juce::AudioProcessorValueTreeState::ParameterLayout RSynth1AudioProcessor::creat
 {
     std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
 
-    params.push_back(std::make_unique<juce::AudioParameterFloat>("ATTACK", "Attack", juce::NormalisableRange<float>(0.0f, 5000.0f), 0.5f));
-    params.push_back(std::make_unique<juce::AudioParameterFloat>("DECAY", "Decay", juce::NormalisableRange<float>(0.0f, 5000.0f), 0.5f));
-    params.push_back(std::make_unique<juce::AudioParameterFloat>("SUSTAIN", "Sustain", juce::NormalisableRange<float>(0.0f, 5000.0f), 0.5f));
-    params.push_back(std::make_unique<juce::AudioParameterFloat>("RELEASE", "Release", juce::NormalisableRange<float>(0.0f, 5000.0f), 0.5f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("ATTACK", "Attack", juce::NormalisableRange<float>(1.0f, 5000.0f), 1.0f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("DECAY", "Decay", juce::NormalisableRange<float>(1.0f, 2000.0f), 500.0f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("SUSTAIN", "Sustain", juce::NormalisableRange<float>(0.0f, 1.0f), 0.1f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("RELEASE", "Release", juce::NormalisableRange<float>(1.0f, 5000.0f), 1.0f));
     params.push_back(std::make_unique<juce::AudioParameterFloat>("CUTOFF", "Cutoff", juce::NormalisableRange<float>(20.0f, 5000.0f), 2000.0f));
     params.push_back(std::make_unique<juce::AudioParameterFloat>("RESO", "Resonance", juce::NormalisableRange<float>(0.0f, 10.0f), 0.5f));
-    params.push_back(std::make_unique<juce::AudioParameterFloat>("GAIN", "Gain", juce::NormalisableRange<float>(0.0f, 0.75f), 0.25f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("AMP", "Amp", juce::NormalisableRange<float>(0.0f, 5.0f), 1.0f));
     params.push_back(std::make_unique<juce::AudioParameterFloat>("SAWOSC", "SawOsc", juce::NormalisableRange<float>(0.0f, 0.33f), 0.15f));
     params.push_back(std::make_unique<juce::AudioParameterFloat>("SUBOSC", "SubOsc", juce::NormalisableRange<float>(0.0f, 0.33f), 0.15f));
     params.push_back(std::make_unique<juce::AudioParameterFloat>("SQROSC", "SqrOsc", juce::NormalisableRange<float>(0.0f, 0.33f), 0.15f));

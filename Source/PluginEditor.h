@@ -12,11 +12,10 @@
 #include "PluginProcessor.h"
 #include "Envelope.h"
 #include "Filter.h"
-#include "Gain.h"
+#include "Amplifier.h"
 #include "SawOsc.h"
 #include "SubOsc.h"
 #include "SquareOsc.h"
-#include "FilterChoice.h"
 #include "Chorus.h"
 #include "Arpeggiator.h"
 #include "Lfo.h"
@@ -40,7 +39,7 @@ private:
 
     Envelope envGUI;
     Filter filterGUI;
-    Gain gainGUI;
+    Amplifier ampGUI;
     SawOsc sawGUI;
     SubOsc subGUI;
     SquareOsc sqrGUI;

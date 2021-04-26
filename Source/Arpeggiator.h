@@ -31,6 +31,6 @@ private:
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> arpVal;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> arpBool;
 
-    int const buttonWidth = 50.0f;
+    int const buttonWidth = 60.0f;
     int const sliderWidth = 40.0f;
 };

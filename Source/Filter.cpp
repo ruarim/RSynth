@@ -35,10 +35,10 @@ Filter::Filter(RSynth1AudioProcessor& p) :
     resoLabel.setJustificationType(juce::Justification::centred);
     resoLabel.setFont(juce::Font(12.0f, juce::Font::plain));
 
-    filterChoiceButton.setButtonText("Hi/low");
+    filterChoiceButton.setButtonText("Hi/Low");
     addAndMakeVisible(&filterChoiceButton);
     filterChoiceButton.setClickingTogglesState(true);
-
+    
     cutoffSlider.setSkewFactorFromMidPoint(800.0f);
 
     cutoffVal = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(processor.valueTree, "CUTOFF", cutoffSlider);
@@ -60,5 +60,5 @@ void Filter::resized()
 {
     cutoffSlider.setBounds(20, 30, sliderWidth, 100);
     resoSlider.setBounds(60, 30, sliderWidth, 100);
-    filterChoiceButton.setBounds(120, 30, buttonWidth, 50);
+    filterChoiceButton.setBounds(120, 20, buttonWidth, 50);
 }

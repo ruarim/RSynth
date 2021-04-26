@@ -26,7 +26,7 @@ private:
 
     juce::Slider subOscSlider;
 
-    juce::Label subOscLabel{ {}, "SubOsc" };
+    juce::Label subOscLabel{ {}, "Sub" };
 
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> subOscVal;
 

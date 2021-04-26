@@ -16,20 +16,14 @@
       <FILE id="ufQOQ0" name="Arpeggiator.h" compile="0" resource="0" file="Source/Arpeggiator.h"/>
       <FILE id="LynDrZ" name="Chorus.cpp" compile="1" resource="0" file="Source/Chorus.cpp"/>
       <FILE id="y1QRze" name="Chorus.h" compile="0" resource="0" file="Source/Chorus.h"/>
-      <FILE id="smsKVX" name="ChorusModule.cpp" compile="1" resource="0"
-            file="Source/ChorusModule.cpp"/>
-      <FILE id="jVkHbg" name="ChorusModule.h" compile="0" resource="0" file="Source/ChorusModule.h"/>
-      <FILE id="Geib7n" name="FilterChoice.cpp" compile="1" resource="0"
-            file="Source/FilterChoice.cpp"/>
-      <FILE id="VocQcY" name="FilterChoice.h" compile="0" resource="0" file="Source/FilterChoice.h"/>
       <FILE id="eHTqOG" name="SquareOsc.cpp" compile="1" resource="0" file="Source/SquareOsc.cpp"/>
       <FILE id="yi8U5a" name="SquareOsc.h" compile="0" resource="0" file="Source/SquareOsc.h"/>
       <FILE id="rvexM6" name="SubOsc.cpp" compile="1" resource="0" file="Source/SubOsc.cpp"/>
       <FILE id="P11Igf" name="SubOsc.h" compile="0" resource="0" file="Source/SubOsc.h"/>
       <FILE id="c1WUSt" name="SawOsc.cpp" compile="1" resource="0" file="Source/SawOsc.cpp"/>
       <FILE id="VzbjXm" name="SawOsc.h" compile="0" resource="0" file="Source/SawOsc.h"/>
-      <FILE id="MO2AY5" name="Gain.cpp" compile="1" resource="0" file="Source/Gain.cpp"/>
-      <FILE id="AxOUuv" name="Gain.h" compile="0" resource="0" file="Source/Gain.h"/>
+      <FILE id="MO2AY5" name="Amplifier.cpp" compile="1" resource="0" file="Source/Amplifier.cpp"/>
+      <FILE id="AxOUuv" name="Amplifier.h" compile="0" resource="0" file="Source/Amplifier.h"/>
       <FILE id="BmFAyy" name="Filter.cpp" compile="1" resource="0" file="Source/Filter.cpp"/>
       <FILE id="faHjk0" name="Filter.h" compile="0" resource="0" file="Source/Filter.h"/>
       <FILE id="EJZVHT" name="Envelope.cpp" compile="1" resource="0" file="Source/Envelope.cpp"/>

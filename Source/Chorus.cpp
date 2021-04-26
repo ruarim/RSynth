@@ -18,11 +18,11 @@ Chorus::Chorus(RSynth1AudioProcessor& p) :
     chorusMix.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     chorusMix.setValue(0.1f);
     chorusMix.setTextBoxStyle(juce::Slider::NoTextBox, true, 0, 0);
-    addAndMakeVisible(&chorusMix);
-    addAndMakeVisible(&chorusMixLabel);
-    chorusMixLabel.attachToComponent(&chorusMix, false);
-    chorusMixLabel.setJustificationType(juce::Justification::centred);
-    chorusMixLabel.setFont(juce::Font(12.0f, juce::Font::plain));
+    addAndMakeVisible(&chorusMix); 
+    addAndMakeVisible(&chorusMixLabel); //
+    chorusMixLabel.attachToComponent(&chorusMix, false); //
+    chorusMixLabel.setJustificationType(juce::Justification::centred); ///
+    chorusMixLabel.setFont(juce::Font(12.0f, juce::Font::plain)); ///
 
     chorusDepth.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     chorusDepth.setValue(0.1f);
